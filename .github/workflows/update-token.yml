@@ -13,7 +13,17 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v3
+      
+      # Mask the invite URL so it doesn't get printed in the logs.
+      # This adds a layer of protection in case we run the workflow with
+      # a private invite URL by mistake.
       - run: |
+          url=$(jq -r '.inputs.token' $GITHUB_EVENT_PATH)
+          echo ::add-mask::$url
+          echo INVITE_URL="$url" >> $GITHUB_ENV
+          
+      - run: |
+          INVITE_URL=$(jq -r '.inputs.secret' $GITHUB_EVENT_PATH)
           cat << EOF > index.html
           <!DOCTYPE html>
 
@@ -25,8 +35,7 @@ jobs:
             </head>
           </html>
           EOF
-        env:
-          INVITE_URL: ${{ inputs.token }}
+
       - uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "chore: update Slack token"
