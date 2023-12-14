@@ -21,7 +21,17 @@ jobs:
           url=$(jq -r '.inputs.slack_invite_url' $GITHUB_EVENT_PATH)
           echo ::add-mask::$url
           echo SLACK_INVITE_URL="$url" >> $GITHUB_ENV
-          
+      
+      - run: |
+          echo $SLACK_INVITE_URL
+          | grep -E 'https://join\.slack\.com/t/developersitalia/shared_invite/zt-[A-Za-z0-9-]+' > /dev/null
+          || (
+            echo "⚠️ The invite URL doesn't look like a valid invite for Developers Italia's Slack ⚠️"
+            echo "⚠️ Check the logs ⚠️"
+          )
+
+    
+        
       - run: |
           cat << EOF > index.html
           <!DOCTYPE html>
