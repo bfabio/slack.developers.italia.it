@@ -22,14 +22,10 @@ jobs:
           echo ::add-mask::$url
           echo SLACK_INVITE_URL="$url" >> $GITHUB_ENV
       
-      - run: |
-          echo $SLACK_INVITE_URL
-          | grep -E 'https://join\.slack\.com/t/developersitalia/shared_invite/zt-[A-Za-z0-9-]+' > /dev/null
-          || (
-            echo "⚠️ The invite URL doesn't look like a valid invite for Developers Italia's Slack ⚠️"
-            echo "⚠️ Check the logs ⚠️"
-          )
-
+      - run: >
+          echo $SLACK_INVITE_URL 
+          | grep -E 'https://join\.slack\.com/t/developersitalia/shared_invite/zt-[A-Za-z0-9-]+' > /dev/null 
+          || echo "::error::Input invite URL doesn't look like an invite to Developers Italia's Slack"
     
         
       - run: |
