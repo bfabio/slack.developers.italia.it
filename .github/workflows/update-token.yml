@@ -25,7 +25,7 @@ jobs:
       - run: >
           echo $SLACK_INVITE_URL 
           | grep -E 'https://join\.slack\.com/t/developersitalia/shared_invite/zt-[A-Za-z0-9-]+' > /dev/null 
-          || echo "::error::Input invite URL doesn't look like an invite to Developers Italia's Slack"
+          || (echo "::error::Input invite URL doesn't look like an invite to Developers Italia's Slack"; exit 1)
     
         
       - run: |
